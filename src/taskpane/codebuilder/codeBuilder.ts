@@ -16,4 +16,9 @@ export default class CodeBuilder {
     this.language = language;
     this.theme = theme;
   }
+
+   highLightCode(){
+
+  }
+
 }
