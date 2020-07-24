@@ -1,6 +1,6 @@
 import * as React from "react";
-import { Button, ButtonType } from "office-ui-fabric-react";
-import Header from "./Header";
+import { Button, Stack, PrimaryButton, IStackProps, ButtonType } from "office-ui-fabric-react";
+// import Header from "./Header";
 import Progress from "./Progress";
 import { Code } from "./Code";
 /* global Button, Header, HeroList, HeroListItem, Progress */
@@ -11,40 +11,34 @@ export interface AppProps {
 }
 
 export interface AppState {
-  // listItems: HeroListItem[];
+  codesnippet: string;
 }
 
 export default class App extends React.Component<AppProps, AppState> {
   constructor(props, context) {
     super(props, context);
-    this.state = {
-      listItems: []
-    };
   }
 
-  componentDidMount() {
+  handler = (val: string) => {
     this.setState({
-      listItems: [
-        {
-          icon: "Ribbon",
-          primaryText: "Achieve more with Office integration"
-        },
-        {
-          icon: "Unlock",
-          primaryText: "Unlock features and functionality"
-        },
-        {
-          icon: "Design",
-          primaryText: "Create and visualize like a pro"
-        }
-      ]
+      codesnippet: val
     });
-  }
+  };
 
   click = async () => {
-    /**
-     * Insert your OneNote code here
-     */
+    try {
+      await OneNote.run(async context => {
+        // Get the current page.
+        var page = context.application.getActivePage();
+
+        page.addOutline(40, 90, `${this.state.codesnippet}`);
+
+        // Run the queued commands, and return a promise to indicate task completion.
+        return context.sync();
+      });
+    } catch (error) {
+      console.log("Error: " + error);
+    }
   };
 
   render() {
@@ -59,20 +53,12 @@ export default class App extends React.Component<AppProps, AppState> {
     return (
       <div className="ms-welcome">
         {/* <Header logo="assets/logo-filled.png" title={this.props.title} message="Welcome" /> */}
-        <Code></Code>
-        {/* <HeroList message="Discover what Office Add-ins can do for you today!" items={this.state.listItems}>
-          <p className="ms-font-l">
-            Modify the source files, then click <b>Run</b>.
-          </p>
-          <Button
-            className="ms-welcome__action"
-            buttonType={ButtonType.hero}
-            iconProps={{ iconName: "ChevronRight" }}
-            onClick={this.click}
-          >
-            Run
-          </Button>
-        </HeroList> */}
+        <Code snippet={this.handler.bind(this)}></Code>
+        <Stack>
+        <Stack.Item grow={10} align="center">
+          <PrimaryButton text="Run" allowDisabledFocus  onClick={this.click} />
+        </Stack.Item>
+        </Stack>
       </div>
     );
   }

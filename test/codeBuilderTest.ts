@@ -1,5 +1,5 @@
 import { expect } from "chai";
-import CodeBuilder from "../src/taskpane/codebuilder/codeBuilder";
+import CodeBuilder from "../src/taskpane/components/codebuilder/codeBuilder";
 
 describe("CodeBuilder", () => {
   it("can be initialized with only sourceCode parameter", () => {
