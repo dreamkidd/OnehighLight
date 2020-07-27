@@ -31,7 +31,27 @@ const innerStackTokens: IStackTokens = {
   padding: 5
 };
 
-const language: IDropdownOption[] = [{ key: "java", text: "java" }];
+const language: IDropdownOption[] = [
+  { key: "auto", text: "Auto" },
+  { key: "java", text: "Java" },
+  { key: "C#", text: "C#" },
+  { key: ".properties", text: "Properties" },
+  { key: "C++", text: "C++" },
+  { key: "C", text: "C" },
+  { key: "CSS", text: "CSS" },
+  { key: "Go", text: "Go" },
+  { key: "HTML, XML", text: "HTML, XML" },
+  { key: "JSON", text: "JSON" },
+  { key: "Less", text: "Less" },
+  { key: "Lua", text: "Lua" },
+  { key: "Python", text: "Python" },
+  { key: "PHP", text: "PHP" },
+  { key: "Swift", text: "Swift" },
+  { key: "YAML", text: "YAML" },
+  { key: "TypeScript", text: "TypeScript" },
+  { key: "SQL", text: "SQL" },
+  { key: "Kotlin", text: "Kotlin" },
+];
 const theme: IDropdownOption[] = [{ key: "default", text: "default" }];
 
 interface CodeProp {
@@ -42,7 +62,7 @@ const initialState = { code: "" };
 type CodeState = Readonly<typeof initialState>;
 export class Code extends React.Component<CodeProp, CodeState> {
   onChange = (ev: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newText: string): void => {
-    let codeBuilder = new CodeBuilder(newText,'java');
+    let codeBuilder = new CodeBuilder(newText);
     codeBuilder.highLight();
     this.props.snippet(codeBuilder.codeSnippet);
   };
@@ -53,24 +73,19 @@ export class Code extends React.Component<CodeProp, CodeState> {
           <Stack.Item grow={20} align="center" styles={stackItemStyles}>
             <TextField label="Input you Code Here" multiline autoAdjustHeight onChange={this.onChange} />
           </Stack.Item>
-          {/* <Stack.Item grow={10} align="center" styles={stackItemStyles}>
+          <Stack.Item grow={10} align="center" styles={stackItemStyles}>
             <Stack horizontal horizontalAlign="center">
               <Stack.Item>
-                <Dropdown
-                  placeholder="Select an option"
-                  label="Choose Language"
-                  options={language}
-                  styles={dropdownStyles}
-                />
-                <Dropdown
+                <Dropdown label="Choose Language" defaultSelectedKey="auto" options={language} styles={dropdownStyles} />
+                {/* <Dropdown
                   placeholder="Select an option"
                   label="Choose Language"
                   options={theme}
                   styles={dropdownStyles}
-                />
+                /> */}
               </Stack.Item>
             </Stack>
-          </Stack.Item> */}
+          </Stack.Item>
         </Stack>
       </Stack>
     );

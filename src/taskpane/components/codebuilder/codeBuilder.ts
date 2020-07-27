@@ -23,12 +23,15 @@ export default class CodeBuilder {
     if (this.language === "auto") {
       this._content = hljs.highlightAuto(this._sourceCode).value;
     } else {
-      this._content = hljs.highlight(this.language, this._sourceCode).value;
+      try {
+        this._content = hljs.highlight(this.language, this._sourceCode).value;
+      } catch (error) {
+        console.warn("caught exception", error);
+        this._content = hljs.highlightAuto(this._sourceCode).value;
+      }
     }
-    console.log(this._content);
     this.genBr();
     this.replace();
-    console.log(this._content);
     this.replaceWriteSpace();
     this.codeSnippet = this._content;
   }
@@ -64,9 +67,12 @@ export default class CodeBuilder {
   private replace() {
     let tokenized = this._content;
     tokenized = tokenized
-      .replace(/class="hljs-subst"|class="hljs-title"/g,`
+      .replace(
+        /class="hljs-subst"|class="hljs-title"/g,
+        `
       style="color: #000000;font-style: normal;"
-      `)
+      `
+      )
       // .replace(
       //   /class="hljs-meta"/g,
       //   `style="font-family: ${this.theme.getFontFamily()}; font-size: ${this.theme.getFontSize()}pt; color: ${this.theme.getMeta() ||
@@ -76,14 +82,8 @@ export default class CodeBuilder {
         /class="hljs-comment"|class="hljs-quote"/g,
         `style="font-family: ${this.theme.getFontFamily()}; font-size: ${this.theme.getFontSize()}pt; color: #808080;font-style: italic;"`
       )
-      .replace(
-        /class="hljs-string"/g,
-        `style="color: #008000; font-weight: bold;"`
-      )
-      .replace(
-        /class="hljs-variable"|class="hljs-template-variable"/g,
-        `style="color: #660e7a;"`
-      )
+      .replace(/class="hljs-string"/g, `style="color: #008000; font-weight: bold;"`)
+      .replace(/class="hljs-variable"|class="hljs-template-variable"/g, `style="color: #660e7a;"`)
       .replace(
         /class="hljs-template-variable"/g,
         `style="font-family: ${this.theme.getFontFamily()}; font-size: ${this.theme.getFontSize()}pt; color: ${this.theme.getTemplateVariable() ||
@@ -185,7 +185,8 @@ export default class CodeBuilder {
         `style="font-family: ${this.theme.getFontFamily()}; font-size: ${this.theme.getFontSize()}pt; color: ${this.theme.getDefault()};"`
       );
     tokenized =
-      `<p style="display: block; overflow-x: auto; color: #000000; background: #fff; font-family: ${this.theme.getFontFamily()}; font-size: ${this.theme.getFontSize()}pt;">` + tokenized;
+      `<p style="display: block; overflow-x: auto; color: #000000; background: #fff; font-family: ${this.theme.getFontFamily()}; font-size: ${this.theme.getFontSize()}pt;">` +
+      tokenized;
     tokenized += "</p>";
     this._content = tokenized;
   }
