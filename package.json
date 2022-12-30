@@ -60,7 +60,7 @@
     "less-loader": "^5.0.0",
     "html-loader": "^0.5.5",
     "html-webpack-plugin": "^4.3.0",
-    "mocha": "^8.0.1",
+    "mocha": "^8.4.0",
     "office-addin-cli": "^1.0.10",
     "office-addin-debugging": "^3.0.31",
     "office-addin-dev-certs": "^1.5.2",
